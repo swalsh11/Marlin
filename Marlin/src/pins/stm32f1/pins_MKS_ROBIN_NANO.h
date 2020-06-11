@@ -42,8 +42,14 @@
 // EEPROM
 //
 #if NO_EEPROM_SELECTED
-  //#define FLASH_EEPROM_EMULATION
-  #define SDCARD_EEPROM_EMULATION
+ // #define SDCARD_EEPROM_EMULATION
+
+  // from https://github.com/le3tspeak/Marlin-2.0.X-Sapphire-PRO/blob/5fb9081cc0ae912262bee453f126c1e19b92d379/Marlin/src/pins/stm32/pins_MKS_ROBIN_NANO.h#L45
+  #define SPI_FLASH_EEPROM_EMULATION       // Deactivate if EEPROM is to be saved on the SD card, SPI_FLASH_EEPROM_EMULATION must then be //...
+  #define SPI_FLASH_EEPROM_OFFSET 0x700000
+  #define SPI_FLASH_DEVICE 2
+  #define SPI_FLASH_CS_PIN PB12
+  
 #endif
 
 //
@@ -52,7 +58,7 @@
 #define X_STOP_PIN                          PA15
 #define Y_STOP_PIN                          PA12
 #define Z_MIN_PIN                           PA11
-#define Z_MAX_PIN                           PC4
+//#define Z_MAX_PIN                           PC4
 
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN                    PA4   // MT_DET
@@ -77,22 +83,22 @@
 #define E0_STEP_PIN                         PD6
 #define E0_DIR_PIN                          PD3
 
-#define E1_ENABLE_PIN                       PA3
-#define E1_STEP_PIN                         PA6
-#define E1_DIR_PIN                          PA1
+//#define E1_ENABLE_PIN                       PA3
+//#define E1_STEP_PIN                         PA6
+//#define E1_DIR_PIN                          PA1
 
 //
 // Temperature Sensors
 //
 #define TEMP_0_PIN                          PC1   // TH1
-#define TEMP_1_PIN                          PC2   // TH2
+//#define TEMP_1_PIN                          PC2   // TH2
 #define TEMP_BED_PIN                        PC0   // TB1
 
 //
 // Heaters / Fans
 //
 #define HEATER_0_PIN                        PC3   // HEATER1
-#define HEATER_1_PIN                        PB0   // HEATER2
+//#define HEATER_1_PIN                        PB0   // HEATER2
 #define HEATER_BED_PIN                      PA0   // HOT BED
 
 #define FAN_PIN                             PB1   // FAN
@@ -106,37 +112,88 @@
 //
 // Misc. Functions
 //
-#define POWER_LOSS_PIN                      PA2   // PW_DET
-#define PS_ON_PIN                           PA3   // PW_OFF
+//#define POWER_LOSS_PIN                      PA2   // PW_DET
+//#define PS_ON_PIN                           PA3   // PW_OFF
 
 #define LED_PIN                             PB2
 
 //
 // SD Card
 //
-#ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION              ONBOARD
-#endif
+//#ifndef SDCARD_CONNECTION
+ // #define SDCARD_CONNECTION              ONBOARD
+//#endif
 
 #define SDIO_SUPPORT
 #define SD_DETECT_PIN                       PD12
+#define SDIO_CLOCK                           8000000       /* 8 MHz */
 
 //
 // LCD / Controller
 //
 #define BEEPER_PIN                          PC5
 
+// UART
+#if HAS_TMC_UART
+
+    #define X_SERIAL_TX_PIN                   PE5 // TC-MAX31855  CS pin 
+    #define X_SERIAL_RX_PIN                   X_SERIAL_TX_PIN
+
+    #define Y_SERIAL_TX_PIN                   X_SERIAL_TX_PIN
+    #define Y_SERIAL_RX_PIN                   X_SERIAL_TX_PIN
+
+    #define Z_SERIAL_TX_PIN                   X_SERIAL_TX_PIN
+    #define Z_SERIAL_RX_PIN                   X_SERIAL_TX_PIN
+
+    #define E0_SERIAL_TX_PIN                  PA5 // wifi PA5 pin
+    #define E0_SERIAL_RX_PIN                  E0_SERIAL_TX_PIN
+
+  // Reduce baud rate for software serial reliability
+  //#if HAS_TMC_SW_SERIAL
+  #define TMC_BAUD_RATE 19200
+  //#endif
+
+#endif
+
+// from https://github.com/le3tspeak/Marlin-2.0.X-MKS-Robin-Nano/blob/ccab494060aa552243e8323c15aee0bae4f61a14/Marlin/src/pins/stm32f1/pins_MKS_ROBIN_NANO.h#L268
+//
+// WIFI ESP8266 
+//
+
+#if ANY (WIFISUPPORT, ESP3D_WIFISUPPORT)
+  #define WIFI_TX_PIN    PA10
+  #define WIFI_RX_PIN    PA9
+  #define WIFI_IO0_PIN   PC13
+  #define WIFI_IO1_PIN   PC7
+#endif
+
 /**
  * Note: MKS Robin TFT screens use various TFT controllers.
  * If the screen stays white, disable 'LCD_RESET_PIN'
  * to let the bootloader init the screen.
  */
+
 #if ENABLED(FSMC_GRAPHICAL_TFT)
+
+  #define FSMC_UPSCALE 3
+  #define LCD_FULL_PIXEL_WIDTH  480
+  #define LCD_PIXEL_OFFSET_X    48
+  #define LCD_FULL_PIXEL_HEIGHT 320
+  #define LCD_PIXEL_OFFSET_Y    32
+
+#endif
+
+#if ENABLED(FSMC_GRAPHICAL_TFT)
+  #define DOGLCD_MOSI -1 // prevent redefine Conditionals_post.h
+  #define DOGLCD_SCK -1
   #define FSMC_CS_PIN                       PD7   // NE4
   #define FSMC_RS_PIN                       PD11  // A0
 
-  #define LCD_RESET_PIN                     PC6   // FSMC_RST
-  #define NO_LCD_REINIT                           // Suppress LCD re-initialization
+  #define LCD_USE_DMA_FSMC
+  #define FSMC_DMA_DEV DMA2
+  #define FSMC_DMA_CHANNEL DMA_CH5
+ // #define LCD_RESET_PIN                     PC6   // FSMC_RST
+  //#define NO_LCD_REINIT                           // Suppress LCD re-initialization
 
   #define LCD_BACKLIGHT_PIN                 PD13
 
