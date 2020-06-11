@@ -2149,7 +2149,7 @@
 #define TFT_MARLINBG_COLOR COLOR_BLACK
 #define TFT_DISABLED_COLOR COLOR_DARK
 #define TFT_BTCANCEL_COLOR COLOR_RED
-#define TFT_BTARROWS_COLOR COLOR_WHITE
+#define TFT_BTARROWS_COLOR COLOR_YELLOW
 #define TFT_BTOKMENU_COLOR COLOR_LIME
 
 //=============================================================================
