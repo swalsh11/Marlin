@@ -28,8 +28,6 @@ __Not for production use. Use with caution!__
 * Configuration_adv.h
 * Marlin/src/lcd/dogm/u8g_dev_tft_320x240_upscale_from_128x64.cpp
 
-Most parts of the changes were copied from https://github.com/porlock/SapphireProMarlin2.0stable
-
 ## Sapphire Pro modifications
 * X Y Z steppers RX/TX go to PE5 (thermocouple) pin
 * E stepper RX/TX goes to PA6 (stepper 5 STEP) pin
