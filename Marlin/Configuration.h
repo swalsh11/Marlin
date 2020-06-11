@@ -2145,6 +2145,13 @@
 //
 #define FSMC_GRAPHICAL_TFT
 
+#define TFT_MARLINUI_COLOR COLOR_WHITE
+#define TFT_MARLINBG_COLOR COLOR_BLACK
+#define TFT_DISABLED_COLOR COLOR_DARK
+#define TFT_BTCANCEL_COLOR COLOR_RED
+#define TFT_BTARROWS_COLOR COLOR_WHITE
+#define TFT_BTOKMENU_COLOR COLOR_LIME
+
 //=============================================================================
 //============================  Other Controllers  ============================
 //=============================================================================
@@ -2155,7 +2162,7 @@
 #define TOUCH_BUTTONS
 #if ENABLED(TOUCH_BUTTONS)
   #define BUTTON_DELAY_EDIT  50 // (ms) Button repeat delay for edit screens
-  #define BUTTON_DELAY_MENU 100 // (ms) Button repeat delay for menus
+  #define BUTTON_DELAY_MENU 50 // (ms) Button repeat delay for menus
 
   #define XPT2046_X_CALIBRATION    12013
   #define XPT2046_X_OFFSET           -32
