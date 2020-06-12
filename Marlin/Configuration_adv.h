@@ -1747,8 +1747,7 @@
 #endif
 
 // Moves (or segments) with fewer steps than this will be joined with the next move
-//#define MIN_STEPS_PER_SEGMENT 6
-#define MIN_STEPS_PER_SEGMENT 1
+#define MIN_STEPS_PER_SEGMENT 6
 
 /**
  * Minimum delay before and after setting the stepper DIR (in ns)
@@ -3042,7 +3041,7 @@
    */
   //#define VOLUMETRIC_DEFAULT_ON
 
-  #define VOLUMETRIC_EXTRUDER_LIMIT
+ // #define VOLUMETRIC_EXTRUDER_LIMIT
   #if ENABLED(VOLUMETRIC_EXTRUDER_LIMIT)
     /**
      * Default volumetric extrusion limit in cubic mm per second (mm^3/sec).
