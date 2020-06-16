@@ -51,6 +51,7 @@
   #define SPI_FLASH_CS_PIN PB12
   
 #endif
+#define ENABLE_SPI2
 
 //
 // Limit Switches
@@ -115,7 +116,18 @@
 //#define POWER_LOSS_PIN                      PA2   // PW_DET
 //#define PS_ON_PIN                           PA3   // PW_OFF
 
-#define LED_PIN                             PB2
+//#define SUICIDE_PIN                       PB2   // Enable MKSPWC support ROBIN NANO v1.2 ONLY
+//#define SUICIDE_PIN_INVERTING false
+
+//#define KILL_PIN                          PA2   // Enable MKSPWC support ROBIN NANO v1.2 ONLY
+//#define KILL_PIN_INVERTING true                 // Enable MKSPWC support ROBIN NANO v1.2 ONLY
+
+//#define SERVO0_PIN                        PA8   // Enable BLTOUCH support ROBIN NANO v1.2 ONLY
+
+//#define LED_PIN                           PB2
+
+#define MT_DET_1_PIN                        PA4
+#define MT_DET_PIN_INVERTING false
 
 //
 // SD Card
@@ -203,4 +215,13 @@
     #define TOUCH_MISO_PIN                  PB14  // SPI2_MISO
     #define TOUCH_MOSI_PIN                  PB15  // SPI2_MOSI
   #endif
+
+#endif
+
+#define SPI_FLASH
+#if ENABLED(SPI_FLASH)
+  #define W25QXX_CS_PIN                     PB12
+  #define W25QXX_MOSI_PIN                   PB15
+  #define W25QXX_MISO_PIN                   PB14
+  #define W25QXX_SCK_PIN                    PB13
 #endif
