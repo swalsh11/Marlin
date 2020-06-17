@@ -813,7 +813,7 @@
  */
 #define XY_FREQUENCY_LIMIT      10 // (Hz) Maximum frequency of small zigzag infill moves. Set with M201 F<hertz>.
 #ifdef XY_FREQUENCY_LIMIT
-  #define XY_FREQUENCY_MIN_PERCENT 5 // (percent) Minimum FR percentage to apply. Set with M201 G<min%>.
+  #define XY_FREQUENCY_MIN_PERCENT 25 // (percent) Minimum FR percentage to apply. Set with M201 G<min%>.
 #endif
 
 // Minimum planner junction speed. Sets the default minimum speed the planner plans for at the end
