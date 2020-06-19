@@ -137,8 +137,9 @@
 //#endif
 
 #define SDIO_SUPPORT
+#define SDIO_CLOCK                          8000000       /* 8 MHz */
 #define SD_DETECT_PIN                       PD12
-#define SDIO_CLOCK                           8000000       /* 8 MHz */
+#define ONBOARD_SD_CS_PIN                   PC11
 
 //
 // LCD / Controller
