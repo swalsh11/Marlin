@@ -41,17 +41,15 @@
 //
 // EEPROM
 //
-#if NO_EEPROM_SELECTED
- // #define SDCARD_EEPROM_EMULATION
-
-  // from https://github.com/le3tspeak/Marlin-2.0.X-Sapphire-PRO/blob/5fb9081cc0ae912262bee453f126c1e19b92d379/Marlin/src/pins/stm32/pins_MKS_ROBIN_NANO.h#L45
-  #define SPI_FLASH_EEPROM_EMULATION       // Deactivate if EEPROM is to be saved on the SD card, SPI_FLASH_EEPROM_EMULATION must then be //...
-  #define SPI_FLASH_EEPROM_OFFSET 0x700000
-  #define SPI_FLASH_DEVICE 2
-  #define SPI_FLASH_CS_PIN PB12
-  
+// from https://github.com/le3tspeak/Marlin-2.0.X-MKS-Robin-Nano/blob/5c74af5006950defbd8a6d5467ba2707897e881f/Marlin/src/pins/stm32f1/pins_MKS_ROBIN_NANO.h#L39
+//#define SDCARD_EEPROM_EMULATION
+#if EITHER(NO_EEPROM_SELECTED, FLASH_EEPROM_EMULATION) && NONE (SDCARD_EEPROM_EMULATION)
+  #define FLASH_EEPROM_EMULATION
+  #define EEPROM_PAGE_SIZE     (0x800U) // 2KB
+  #define EEPROM_START_ADDRESS (0x8000000UL + (STM32_FLASH_SIZE) * 1024UL - (EEPROM_PAGE_SIZE) * 2UL)
+  #define MARLIN_EEPROM_SIZE   EEPROM_PAGE_SIZE  // 2KB
 #endif
-#define ENABLE_SPI2
+
 
 //
 // Limit Switches
@@ -219,6 +217,11 @@
 
 #endif
 
+//
+// SPI
+//
+
+#define ENABLE_SPI2
 #define SPI_FLASH
 #if ENABLED(SPI_FLASH)
   #define W25QXX_CS_PIN                     PB12
