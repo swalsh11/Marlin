@@ -31,7 +31,7 @@
   #error "MKS Robin nano supports up to 2 hotends / E-steppers. Comment out this line to continue."
 #endif
 
-#define BOARD_INFO_NAME "MKS Robin nano"
+#define BOARD_INFO_NAME "MKS Robin Nano"
 
 //
 // Release PB4 (Y_ENABLE_PIN) from JTAG NRST role
@@ -50,6 +50,7 @@
   #define MARLIN_EEPROM_SIZE   EEPROM_PAGE_SIZE  // 2KB
 #endif
 
+#define ENABLE_SPI2
 
 //
 // Limit Switches
