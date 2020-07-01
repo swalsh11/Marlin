@@ -221,7 +221,7 @@
 // SPI
 //
 
-#define ENABLE_SPI2
+//#define ENABLE_SPI2
 #define SPI_FLASH
 #if ENABLED(SPI_FLASH)
   #define W25QXX_CS_PIN                     PB12
