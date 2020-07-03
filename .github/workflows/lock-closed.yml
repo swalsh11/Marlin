@@ -3,16 +3,40 @@
 # Lock closed issues after a period of inactivity
 #
 
+<<<<<<< HEAD
 name: "Lock closed issue"
 
 on:
   issues:
     types: [closed]
+=======
+name: 'Lock threads'
+
+on:
+  schedule:
+    - cron: '22 0 * * *'
+>>>>>>> 2.0.x
 
 jobs:
   lock:
     runs-on: ubuntu-latest
     steps:
+<<<<<<< HEAD
     - uses: OSDKDev/lock-issues@v1.1
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
+=======
+    - uses: dessant/lock-threads@v2
+      with:
+        github-token: ${{ github.token }}
+        process-only: 'issues'
+        issue-lock-inactive-days: '60'
+        issue-exclude-created-before: ''
+        issue-exclude-labels: 'no-locking'
+        issue-lock-labels: ''
+        issue-lock-comment: >
+          This issue has been automatically locked since there
+          has not been any recent activity after it was closed.
+          Please open a new issue for related bugs.
+        issue-lock-reason: ''
+>>>>>>> 2.0.x
