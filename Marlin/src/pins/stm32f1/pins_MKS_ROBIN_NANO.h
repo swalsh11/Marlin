@@ -41,9 +41,7 @@
 //
 // EEPROM
 //
-// from https://github.com/le3tspeak/Marlin-2.0.X-MKS-Robin-Nano/blob/5c74af5006950defbd8a6d5467ba2707897e881f/Marlin/src/pins/stm32f1/pins_MKS_ROBIN_NANO.h#L39
-//#define SDCARD_EEPROM_EMULATION
-#if EITHER(NO_EEPROM_SELECTED, FLASH_EEPROM_EMULATION) && NONE (SDCARD_EEPROM_EMULATION)
+#if EITHER(NO_EEPROM_SELECTED, FLASH_EEPROM_EMULATION)
   #define FLASH_EEPROM_EMULATION
   #define EEPROM_PAGE_SIZE     (0x800U) // 2KB
   #define EEPROM_START_ADDRESS (0x8000000UL + (STM32_FLASH_SIZE) * 1024UL - (EEPROM_PAGE_SIZE) * 2UL)
@@ -58,7 +56,7 @@
 #define X_STOP_PIN                          PA15
 #define Y_STOP_PIN                          PA12
 #define Z_MIN_PIN                           PA11
-//#define Z_MAX_PIN                           PC4
+#define Z_MAX_PIN                           PC4
 
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN                    PA4   // MT_DET
@@ -83,25 +81,38 @@
 #define E0_STEP_PIN                         PD6
 #define E0_DIR_PIN                          PD3
 
-//#define E1_ENABLE_PIN                       PA3
-//#define E1_STEP_PIN                         PA6
-//#define E1_DIR_PIN                          PA1
+#define E1_ENABLE_PIN                       PA3
+#define E1_STEP_PIN                         PA6
+#define E1_DIR_PIN                          PA1
 
 //
 // Temperature Sensors
 //
 #define TEMP_0_PIN                          PC1   // TH1
-//#define TEMP_1_PIN                          PC2   // TH2
+#define TEMP_1_PIN                          PC2   // TH2
 #define TEMP_BED_PIN                        PC0   // TB1
 
 //
 // Heaters / Fans
 //
-#define HEATER_0_PIN                        PC3   // HEATER1
-//#define HEATER_1_PIN                        PB0   // HEATER2
-#define HEATER_BED_PIN                      PA0   // HOT BED
-
-#define FAN_PIN                             PB1   // FAN
+#ifndef HEATER_0_PIN
+  #define HEATER_0_PIN                      PC3
+#endif
+#if HOTENDS == 1
+  #ifndef FAN1_PIN
+    #define FAN1_PIN                        PB0
+  #endif
+#else
+  #ifndef HEATER_1_PIN
+    #define HEATER_1_PIN                    PB0
+  #endif
+#endif
+#ifndef FAN_PIN
+  #define FAN_PIN                           PB1   // FAN
+#endif
+#ifndef HEATER_BED_PIN
+  #define HEATER_BED_PIN                    PA0
+#endif
 
 //
 // Thermocouples
@@ -112,8 +123,8 @@
 //
 // Misc. Functions
 //
-//#define POWER_LOSS_PIN                      PA2   // PW_DET
-//#define PS_ON_PIN                           PA3   // PW_OFF
+//#define POWER_LOSS_PIN                    PA2   // PW_DET
+//#define PS_ON_PIN                         PA3   // PW_OFF
 
 //#define SUICIDE_PIN                       PB2   // Enable MKSPWC support ROBIN NANO v1.2 ONLY
 //#define SUICIDE_PIN_INVERTING false
@@ -131,12 +142,12 @@
 //
 // SD Card
 //
-//#ifndef SDCARD_CONNECTION
- // #define SDCARD_CONNECTION              ONBOARD
-//#endif
+#ifndef SDCARD_CONNECTION
+  #define SDCARD_CONNECTION              ONBOARD
+#endif
 
 #define SDIO_SUPPORT
-#define SDIO_CLOCK                          8000000       /* 8 MHz */
+#define SDIO_CLOCK 4500000                        // 4.5 MHz
 #define SD_DETECT_PIN                       PD12
 #define ONBOARD_SD_CS_PIN                   PC11
 
@@ -145,67 +156,99 @@
 //
 #define BEEPER_PIN                          PC5
 
-// UART
-#if HAS_TMC_UART
-
-    #define X_SERIAL_TX_PIN                   PE5 // TC-MAX31855  CS pin 
-    #define X_SERIAL_RX_PIN                   X_SERIAL_TX_PIN
-
-    #define Y_SERIAL_TX_PIN                   X_SERIAL_TX_PIN
-    #define Y_SERIAL_RX_PIN                   X_SERIAL_TX_PIN
-
-    #define Z_SERIAL_TX_PIN                   X_SERIAL_TX_PIN
-    #define Z_SERIAL_RX_PIN                   X_SERIAL_TX_PIN
-
-    #define E0_SERIAL_TX_PIN                  PA5 // wifi PA5 pin
-    #define E0_SERIAL_RX_PIN                  E0_SERIAL_TX_PIN
-
-  // Reduce baud rate for software serial reliability
-  //#if HAS_TMC_SW_SERIAL
-  #define TMC_BAUD_RATE 19200
-  //#endif
-
-#endif
-
-// from https://github.com/le3tspeak/Marlin-2.0.X-MKS-Robin-Nano/blob/ccab494060aa552243e8323c15aee0bae4f61a14/Marlin/src/pins/stm32f1/pins_MKS_ROBIN_NANO.h#L268
-//
-// WIFI ESP8266 
-//
-
-#if ANY (WIFISUPPORT, ESP3D_WIFISUPPORT)
-  #define WIFI_TX_PIN    PA10
-  #define WIFI_RX_PIN    PA9
-  #define WIFI_IO0_PIN   PC13
-  #define WIFI_IO1_PIN   PC7
-#endif
-
 /**
  * Note: MKS Robin TFT screens use various TFT controllers.
  * If the screen stays white, disable 'LCD_RESET_PIN'
  * to let the bootloader init the screen.
  */
 
-#if ENABLED(FSMC_GRAPHICAL_TFT)
+#if ENABLED(SPI_GRAPHICAL_TFT)
 
-  #define FSMC_UPSCALE 3
-  #define LCD_FULL_PIXEL_WIDTH  480
-  #define LCD_PIXEL_OFFSET_X    48
-  #define LCD_FULL_PIXEL_HEIGHT 320
-  #define LCD_PIXEL_OFFSET_Y    32
+  #if HAS_SPI_LCD
 
-#endif
+    #define BEEPER_PIN                      PC5
+    #define BTN_ENC                         PE13
+    #define LCD_PINS_ENABLE                 PD13
+    #define LCD_PINS_RS                     PC6
+    #define BTN_EN1                         PE8
+    #define BTN_EN2                         PE11
+    #define LCD_BACKLIGHT_PIN               -1
 
-#if ENABLED(FSMC_GRAPHICAL_TFT)
-  #define DOGLCD_MOSI -1 // prevent redefine Conditionals_post.h
-  #define DOGLCD_SCK -1
+    // MKS MINI12864 and MKS LCD12864B; If using MKS LCD12864A (Need to remove RPK2 resistor)
+    #if ENABLED(MKS_MINI_12864)
+      #define LCD_BACKLIGHT_PIN             -1
+      #define LCD_RESET_PIN                 -1
+      #define DOGLCD_A0                     PD11
+      #define DOGLCD_CS                     PE15
+      #define DOGLCD_SCK                    PA5
+      #define DOGLCD_MOSI                   PA7
+
+      // Required for MKS_MINI_12864 with this board
+      #define MKS_LCD12864B
+      #undef SHOW_BOOTSCREEN
+
+    #else                                         // !MKS_MINI_12864
+
+      #define LCD_PINS_D4                   PE14
+      #if ENABLED(ULTIPANEL)
+        #define LCD_PINS_D5                 PE15
+        #define LCD_PINS_D6                 PD11
+        #define LCD_PINS_D7                 PD10
+      #endif
+
+      #ifndef BOARD_ST7920_DELAY_1
+        #define BOARD_ST7920_DELAY_1     DELAY_NS(125)
+      #endif
+      #ifndef BOARD_ST7920_DELAY_2
+        #define BOARD_ST7920_DELAY_2     DELAY_NS(125)
+      #endif
+      #ifndef BOARD_ST7920_DELAY_3
+        #define BOARD_ST7920_DELAY_3     DELAY_NS(125)
+      #endif
+
+    #endif // !MKS_MINI_12864
+
+  #else
+
+    #define SPI_TFT_CS_PIN                  PD11
+    #define SPI_TFT_SCK_PIN                 PA5
+    #define SPI_TFT_MISO_PIN                PA6
+    #define SPI_TFT_MOSI_PIN                PA7
+    #define SPI_TFT_DC_PIN                  PD10
+    #define SPI_TFT_RST_PIN                 PC6
+
+    #define LCD_BACKLIGHT_PIN               PD13
+
+    #define TOUCH_CS_PIN                    PE14  // SPI1_NSS
+    #define TOUCH_SCK_PIN                   PA5   // SPI1_SCK
+    #define TOUCH_MISO_PIN                  PA6   // SPI1_MISO
+    #define TOUCH_MOSI_PIN                  PA7   // SPI1_MOSI
+
+    #define BTN_EN1                         PE8
+    #define BTN_EN2                         PE11
+    #define BEEPER_PIN                      PC5
+    #define BTN_ENC                         PE13
+
+  #endif // HAS_SPI_LCD
+
+#elif ENABLED(TFT_LVGL_UI)
+
   #define FSMC_CS_PIN                       PD7   // NE4
   #define FSMC_RS_PIN                       PD11  // A0
 
-  #define LCD_USE_DMA_FSMC
-  #define FSMC_DMA_DEV DMA2
-  #define FSMC_DMA_CHANNEL DMA_CH5
- // #define LCD_RESET_PIN                     PC6   // FSMC_RST
+  #define TOUCH_CS_PIN                      PA7   // SPI2_NSS
+  #define TOUCH_SCK_PIN                     PB13  // SPI2_SCK
+  #define TOUCH_MISO_PIN                    PB14  // SPI2_MISO
+  #define TOUCH_MOSI_PIN                    PB15  // SPI2_MOSI
 
+  #define LCD_BACKLIGHT_PIN                 PD13
+
+#elif ENABLED(FSMC_GRAPHICAL_TFT)
+
+  #define FSMC_CS_PIN                       PD7   // NE4
+  #define FSMC_RS_PIN                       PD11  // A0
+
+  #define LCD_RESET_PIN                     PC6   // FSMC_RST
   #define LCD_BACKLIGHT_PIN                 PD13
 
   #if ENABLED(TOUCH_BUTTONS)
@@ -217,11 +260,6 @@
 
 #endif
 
-//
-// SPI
-//
-
-//#define ENABLE_SPI2
 #define SPI_FLASH
 #if ENABLED(SPI_FLASH)
   #define W25QXX_CS_PIN                     PB12
