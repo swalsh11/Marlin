@@ -2167,7 +2167,7 @@
 //
 // FSMC display (MKS Robin, Alfawise U20, JGAurora A5S, REXYZ A1, etc.)
 //
-#define FSMC_GRAPHICAL_TFT
+//#define FSMC_GRAPHICAL_TFT
 
 #define TFT_MARLINUI_COLOR COLOR_WHITE
 #define TFT_MARLINBG_COLOR COLOR_BLACK
@@ -2182,7 +2182,7 @@
 // Default MKS icons and fonts: https://git.io/JJvzK
 // Copy mks_pic and mks_font folders to the root of your SD
 //
-//#define TFT_LVGL_UI
+#define TFT_LVGL_UI
 
 //=============================================================================
 //============================  Other Controllers  ============================
