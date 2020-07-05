@@ -188,11 +188,11 @@
  // #define DOGLCD_MOSI -1 // prevent redefine Conditionals_post.h
  // #define DOGLCD_SCK -1
   #define FSMC_UPSCALE 3
- // #define LCD_FULL_PIXEL_WIDTH  480
- // #define LCD_PIXEL_OFFSET_X    48
- // #define LCD_FULL_PIXEL_HEIGHT 320
- // #define LCD_PIXEL_OFFSET_Y    32
-   #define LCD_USE_DMA_FSMC
+  #define LCD_FULL_PIXEL_WIDTH  480
+  #define LCD_PIXEL_OFFSET_X    48
+  #define LCD_FULL_PIXEL_HEIGHT 320
+  #define LCD_PIXEL_OFFSET_Y    32
+  #define LCD_USE_DMA_FSMC
   #define FSMC_DMA_DEV DMA2
   #define FSMC_DMA_CHANNEL DMA_CH5
 
